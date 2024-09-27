@@ -1,30 +1,41 @@
 import streamlit as st
+
 st.title("Welcome to FLAMES Game")
-s1=st.text_input("Enter first name-")
-s2=st.text_input("Enter second name-")
-s1=list(s1)
-s2=list(s2)
-count=0
+s1 = st.text_input("Enter first name-")
+s2 = st.text_input("Enter second name-")
+
+# Convert names to lists
+s1 = list(s1)
+s2 = list(s2)
+
+# Remove only one occurrence of common characters
 for i in range(len(s1)):
     for j in range(len(s2)):
-        if s1[i]==s2[j]:
-            s1[i]='0'
-            s2[j]='0'
-            break
-print(s1,s2)
-count=0
-for i in s1+s2:
-    if i!='0':
-        count+=1
-print(count)
-res=['friends','lovers','attraction','marriage','enemies','sibilings']
-while len(res)>1:
-    splitIndex=(count % len(res)-1)
+        if s1[i] == s2[j]:
+            s1[i] = '0'  # Mark this character as removed in s1
+            s2[j] = '0'  # Mark this character as removed in s2
+            break  # Only remove one matching character, then stop
+
+# Count the remaining characters (non-'0')
+count = 0
+for i in s1 + s2:
+    if i != '0':
+        count += 1
+
+# FLAMES result
+res = ['friends', 'lovers', 'attraction', 'marriage', 'enemies', 'siblings']
+
+# Process the FLAMES algorithm
+while len(res) > 1:
+    splitIndex = (count % len(res)) - 1
     if splitIndex >= 0:
-        right = res[splitIndex+1 : ]
-        left = res[ : splitIndex]
-        res = right+left
+        # Remove the element at splitIndex
+        res = res[splitIndex + 1:] + res[:splitIndex]
     else:
-        res = res[ : len(res)-1]
+        # If splitIndex is -1, remove the last element
+        res.pop()
+
+# Display the result when the button is clicked
 if st.button("calculate"):
     st.success(res[0])
+
